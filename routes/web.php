@@ -24,8 +24,5 @@ Route::get('/home', function () {
 });
 
 Route::resource('/admin/cars', AdminCarController::class)->middleware('auth');
-Route::get('/admin/cars/{id}/scholarship-payment', [AdminCarController::class, 'scholarshipPayment'])->middleware('auth');
-Route::post('/admin/cars/{id}/pay-scholarship', [AdminCarController::class, 'payScholarship'])->middleware('auth');
-Route::get('/admin/cars/{id}/view', [AdminCarController::class, 'view'])->middleware('auth');
 
 Auth::routes();

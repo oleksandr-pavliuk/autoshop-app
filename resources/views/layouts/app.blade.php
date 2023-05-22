@@ -15,6 +15,13 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <style>
+        main.py-4 {
+            margin-left: auto;
+            margin-right: auto;
+            width: 65%;
+        }
+    </style>
 </head>
 <body>
     <div id="app">

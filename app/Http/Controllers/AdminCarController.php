@@ -6,6 +6,7 @@ use App\Models\Brand;
 use App\Models\Car;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class AdminCarController extends Controller
 {
@@ -23,6 +24,9 @@ class AdminCarController extends Controller
             'cars' => Car::getByParams($filters),
             'brands' => Brand::all(),
             'fieldsToSort' => Car::$fieldsToSort,
+            'equipmentSelection' => Car::$equipmentSelection,
+            'typeSelection' => Car::$typeSelection,
+            'engineSelection' => Car::$engineSelection,
             'filters' => $filters,
         ]);
     }
@@ -30,7 +34,12 @@ class AdminCarController extends Controller
 
     public function create()
     {
-        return view('admin.cars.add', ['brands' => Brand::all()]);
+        return view('admin.cars.add', [
+            'brands' => Brand::all(),
+            'equipmentSelection' => Car::$equipmentSelection,
+            'typeSelection' => Car::$typeSelection,
+            'engineSelection' => Car::$engineSelection,
+        ]);
     }
 
     /**
@@ -38,9 +47,9 @@ class AdminCarController extends Controller
      */
     public function store(Request $request)
     {
-        $car = new Student();
+        $car = new Car();
         $car->model = $request->input('model');
-        $car->year= $request->input('year');
+        $car->year = $request->input('year');
         $car->type = $request->input('type');
         $car->equipment = $request->input('equipment');
         $car->price = $request->input('price');
@@ -48,15 +57,7 @@ class AdminCarController extends Controller
         $car->brand()->associate(Brand::find($request->input('brand')));
         $car->save();
 
-        return Redirect::to('/admin/cars/list');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(int $id)
-    {
-        return view('admin.cars.view', ["car" => Car::find($id)]);
+        return Redirect::to('/admin/cars');
     }
 
     /**
@@ -65,18 +66,21 @@ class AdminCarController extends Controller
     public function edit(int $id)
     {
         return view('admin.cars.edit', [
-            'cars' => Car::find($id),
-            'brands' => Brand::all()
+            'car' => Car::find($id),
+            'brands' => Brand::all(),
+            'equipmentSelection' => Car::$equipmentSelection,
+            'typeSelection' => Car::$typeSelection,
+            'engineSelection' => Car::$engineSelection,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Car $car) : RedirectResponse
+    public function update(Request $request, Car $car): RedirectResponse
     {
         $car->model = $request->input('model');
-        $car->year= $request->input('year');
+        $car->year = $request->input('year');
         $car->type = $request->input('type');
         $car->equipment = $request->input('equipment');
         $car->price = $request->input('price');
@@ -84,7 +88,7 @@ class AdminCarController extends Controller
         $car->brand()->associate(Brand::find($request->input('brand')));
         $car->save();
 
-        return Redirect::to('/admin/cars/list');
+        return Redirect::to('/admin/cars');
     }
 
     /**
@@ -94,6 +98,6 @@ class AdminCarController extends Controller
     {
         Car::destroy($id);
 
-        return Redirect::to('/admin/cars/list');
+        return Redirect::to('/admin/cars');
     }
 }
